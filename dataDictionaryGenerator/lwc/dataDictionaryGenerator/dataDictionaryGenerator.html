@@ -1,0 +1,26 @@
+<template>
+	<lightning-card>
+		<div class="slds-m-around_medium">
+			<!-- <div class="slds-col slds-size_1-of-5 slds-m-left_xx-small"> -->
+			<lightning-layout multiple-rows>
+				<lightning-layout-item size="6" padding="around-small"></lightning-layout-item>
+				<lightning-layout-item size="6" padding="around-small">
+					<lightning-input type="search" label="Search Object" onchange={handleSearch}></lightning-input>
+				</lightning-layout-item>
+			</lightning-layout>
+			<div class="slds-box slds-theme_default slds-m-horizontal_xx-small">
+				<div class="slds-grid slds-gutters">
+					<div class="slds-col slds-size_1-of-1 slds-align_absolute-center ">
+						<lightning-button icon-name="utility:download" label="Download Selected"
+							onclick={downloadAsCsvFile} variant="brand" disabled={disableDownload}></lightning-button>
+					</div>
+				</div>
+				<lightning-checkbox-group name="Object Selection" label="Object Selection" options={searchedObjectNames}
+					value={selectedValues} onchange={handleChange}>
+				</lightning-checkbox-group>
+				<!-- <p>Selected Values are: {selectedValues}</p> -->
+				<!-- </div> -->
+			</div>
+		</div>
+	</lightning-card>
+</template>
