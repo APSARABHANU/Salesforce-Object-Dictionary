@@ -1,6 +1,13 @@
+/*****************************************************************************************
+@ClassName: DataDictionaryGeneratorController
+@Author: Apsarabhanu Devara
+@Description: This controller is used for getting all objects and associated fields .
+******************************************************************************************/
 public with sharing class DataDictionaryGeneratorController {
     public static final String SEPERATOR = ',';
     private static final String NEW_LINE = '\n';
+    
+    //Inner class for wrapping SObject information
     public class SObjectWrapper{
         @AuraEnabled public String label {get;set;}
         @AuraEnabled public String value {get;set;}
@@ -10,6 +17,11 @@ public with sharing class DataDictionaryGeneratorController {
             this.value = value;
         } 
     }
+    
+    /*****************************************************************************************
+	@Description: Method to return the List of Objects
+	@return: sObjectList - list of Objects in Org
+	*********************************************************************************************/
     @AuraEnabled
     public static List<SObjectWrapper> getSObjects(){
         List<SObjectWrapper> sObjectList = new List<SObjectWrapper>();
@@ -22,6 +34,11 @@ public with sharing class DataDictionaryGeneratorController {
         return sObjectList;
     }
     
+    /*****************************************************************************************
+	@Description: method to generate CSV data based on selected SObjects
+    @Param: List<String> selectedObject - list of selected Objects
+	@return: CSVString - String which contains fields for selected Object
+	*********************************************************************************************/
     @AuraEnabled
     public static String generateCsv (List<String> selectedObject){
         String CSVString = '"Object Label"' + SEPERATOR + '"Object Api Name"' + SEPERATOR + '"Field Label"'+
@@ -40,13 +57,6 @@ public with sharing class DataDictionaryGeneratorController {
                                     Schema.DescribeFieldResult fieldResult = objectField.getDescribe();
                                     Schema.DisplayType fieldType = fieldResult.getType();
                                     List<Schema.PicklistEntry> picklistValues = fieldResult.getPicklistValues();
-                                    // String picklistEntries = '';
-                                    // for (Schema.PicklistEntry picklistValue : picklistValues) {
-                                    //      picklistEntries += picklistValue.getValue() + ', ';
-                                    // }
-                                    // if (picklistEntries.endsWith(', ')) {
-                                    //     picklistEntries = picklistEntries.substring(0, picklistEntries.length() - 2);
-                                    // }
                                     CSVString +=  objectResult.getLabel() + SEPERATOR;
                                     CSVString +=  objectResult.getName()  + SEPERATOR;
                                     CSVString +=  fieldResult.getLabel()  + SEPERATOR;
@@ -65,6 +75,12 @@ public with sharing class DataDictionaryGeneratorController {
                             }
         return CSVString;
     }
+    
+    /*****************************************************************************************
+	@Description: Helper method to process picklist values
+    @Param: List<Schema.PicklistEntry> picklistValues - process picklist values
+	@return: returning picklist Values
+	*********************************************************************************************/
     private static String processPicklistValues(List<Schema.PicklistEntry> picklistValues) {
         String picklistAsString = '';
         if (picklistValues != null) {
